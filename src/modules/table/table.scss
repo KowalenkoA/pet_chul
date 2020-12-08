@@ -1,0 +1,26 @@
+.table_body {
+    border: 1px solid black;
+    margin-top: 40px;
+    border-collapse: collapse;
+}
+
+.table_tr td {
+    border-bottom: 1px solid green;
+}
+
+.table_td1{
+    width: 8%;
+    
+}
+
+.table_td5{
+    width: 10%;
+}
+
+.table_img{
+    width: 60px;
+    height: 60px;
+
+    border: 1px solid red;
+    border-radius: 50%;
+}
