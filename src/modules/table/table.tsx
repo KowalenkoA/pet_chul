@@ -9,10 +9,6 @@ interface tableProps {
 }
 
 const Table: React.FC<tableProps> = (props) => {
-
-    useEffect(() => {
-        console.log('tabrend')
-    },[props.dataSet])
     
     return(
         <div className='dfc jcc wd1'>

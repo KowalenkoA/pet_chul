@@ -1,7 +1,14 @@
 .sort_buttons{
+    /*width: 350px;
+    height: 150px;*/
     width: 350px;
-    height: 100px;
+    justify-content: start;
+    align-items: flex-start;
     border: 1px solid black
+}
+
+.sort_buttons label {
+    padding-bottom: 10px;
 }
 
 .sort_buttons_fl {

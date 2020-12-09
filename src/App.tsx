@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Sort from './modules/sort/sort';
 import Table from './modules/table/table';
+import Prev from './modules/prev/prev';
 import { setDataIn } from './store/dataSet/actions';
 import {connect} from 'react-redux';
 let data: Array<IDataSet> = require('./data.json');
@@ -35,37 +36,53 @@ const App: React.FC<appProps> = (props) => {
     console.log( props.dataRedux);
   }
 
-  const idSort = () => {
-    console.log(props.dataRedux[0])
-    if (props.dataRedux[0].id > 1){
-      console.log(true)
-      let arr = props.dataRedux.sort((a, b) => a.id > b.id ? 1: -1).slice();
-      props.setDataIn(arr);
-      setSortInd(false);
-    }else{
-      console.log(false)
-      let arr = props.dataRedux.sort((a, b) => a.id > b.id ? -1: 1).slice();
-      props.setDataIn(arr);
-      setSortInd(true);
+  const sortTable = (val: string) => {
+    if (val === 'id'){
+      if (sortInd){
+        let arr = props.dataRedux.sort((a, b) => a.id > b.id ? 1: -1).slice();
+        props.setDataIn(arr);
+      }else{
+        let arr = props.dataRedux.sort((a, b) => a.id > b.id ? -1: 1).slice();
+        props.setDataIn(arr);
+      }
+    }else if (val === 'name'){
+      if (sortInd){
+        let arr = props.dataRedux.sort((a, b) => a.name > b.name ? 1: -1).slice();
+        props.setDataIn(arr);
+      }else{
+        let arr = props.dataRedux.sort((a, b) => a.name > b.name ? -1: 1).slice();
+        props.setDataIn(arr);
+      }
+    }else if (val === 'age'){
+      if (sortInd){
+        let arr = props.dataRedux.sort((a, b) => a.age > b.age ? 1: -1).slice();
+        props.setDataIn(arr);
+      }else{
+        let arr = props.dataRedux.sort((a, b) => a.age > b.age ? -1: 1).slice();
+        props.setDataIn(arr);
+      }
     }
+    
   }
 
-  const changeSortInd = (val: boolean) => {
+  const changeSort = (val: boolean) => {
     setSortInd(val);
   }
 
   return (
     <div className="App">
-      {console.log('render')}
       <div className='dfr jcc wd1'>
-        <Sort sortInd={sortInd} idSort={idSort} />
+        <Sort sortInd={sortInd} 
+              changeSort={changeSort}
+              sortTable={sortTable} 
+        />
         <div className='dfr'>
           <button className='button' onClick={() => setBtStat(false)}>TABLE</button>
           <button className='button' onClick={() => setBtStat(true)}>PREV</button>
           <button onClick={testClick}>TEST</button>
         </div>
       </div>
-
+      {btStat && <Prev dataSet={props.dataRedux}/>}
       {!btStat && <Table dataSet={props.dataRedux}/>}
     </div>
   );
