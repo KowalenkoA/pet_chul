@@ -26,10 +26,12 @@ interface appProps {
 const App: React.FC<appProps> = (props) => {
   const [btStat, setBtStat] = useState<boolean>(false);
   const [sortInd, setSortInd] = useState<boolean>(false);
+  const [actData, setActData] = useState<Array<IDataSet>>([]);
 
   useEffect(() => {
     //data.map( row => props.setDataIn(row));
-    props.setDataIn(data)
+    props.setDataIn(data);
+    setActData(data.slice(0, 10));
   }, [])
 
   const testClick = () => {
@@ -41,25 +43,31 @@ const App: React.FC<appProps> = (props) => {
       if (sortInd){
         let arr = props.dataRedux.sort((a, b) => a.id > b.id ? 1: -1).slice();
         props.setDataIn(arr);
+        setActData(arr.slice(0, actData.length))
       }else{
         let arr = props.dataRedux.sort((a, b) => a.id > b.id ? -1: 1).slice();
         props.setDataIn(arr);
+        setActData(arr.slice(0, actData.length))
       }
     }else if (val === 'name'){
       if (sortInd){
         let arr = props.dataRedux.sort((a, b) => a.name > b.name ? 1: -1).slice();
         props.setDataIn(arr);
+        setActData(arr.slice(0, actData.length))
       }else{
         let arr = props.dataRedux.sort((a, b) => a.name > b.name ? -1: 1).slice();
         props.setDataIn(arr);
+        setActData(arr.slice(0, actData.length))
       }
     }else if (val === 'age'){
       if (sortInd){
         let arr = props.dataRedux.sort((a, b) => a.age > b.age ? 1: -1).slice();
         props.setDataIn(arr);
+        setActData(arr.slice(0, actData.length))
       }else{
         let arr = props.dataRedux.sort((a, b) => a.age > b.age ? -1: 1).slice();
         props.setDataIn(arr);
+        setActData(arr.slice(0, actData.length))
       }
     }
     
@@ -82,8 +90,8 @@ const App: React.FC<appProps> = (props) => {
           <button onClick={testClick}>TEST</button>
         </div>
       </div>
-      {btStat && <Prev dataSet={props.dataRedux}/>}
-      {!btStat && <Table dataSet={props.dataRedux}/>}
+      {btStat && <Prev dataSet={props.dataRedux} actData={actData} setActData={setActData}/>}
+      {!btStat && <Table dataSet={props.dataRedux} actData={actData} setActData={setActData}/>}
     </div>
   );
 }

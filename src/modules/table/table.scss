@@ -2,15 +2,18 @@
     border: 1px solid black;
     margin-top: 40px;
     border-collapse: collapse;
+    animation-name: tr_anim;
+    animation-duration: 1s;
 }
 
 .table_tr td {
     border-bottom: 1px solid green;
+
+    
 }
 
 .table_td1{
     width: 8%;
-    
 }
 
 .table_td5{
@@ -23,4 +26,18 @@
 
     border: 1px solid red;
     border-radius: 50%;
+
+    
+}
+
+@keyframes tr_anim {
+    0%{
+        left: 0px;
+    }
+    50%{
+
+    }
+    100%{
+        left: 70px;
+    }
 }

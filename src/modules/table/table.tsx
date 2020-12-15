@@ -5,24 +5,23 @@ import TableLine from './tableLine';
 import { v4 as uuid} from 'uuid';
 import { act } from 'react-dom/test-utils';
 
-interface tableProps {
-    dataSet: Array<IDataSet>
+interface ITableProps {
+    dataSet: Array<IDataSet>;
+    actData: Array<IDataSet>;
+    setActData: (arr: Array<IDataSet>) => void;
 }
 
 let yPos: number = 0;
 
-const Table: React.FC<tableProps> = (props) => {
+const Table: React.FC<ITableProps> = (props) => {
 
     const [actData, setActData] = useState<Array<IDataSet>>([]);
-
-    useEffect(() => {
-        //console.log('asd')
-        setActData(props.dataSet.slice(0, 10))
-    },[props.dataSet]);
+    const [num, setNum] = useState<number>(10);
 
     useEffect( () => {
-        //let arr = props.dataSet.slice(0, 10);
-        //setActData(arr);
+        if (props.actData.length > 0){
+            setActData(props.actData)
+        }
         document.addEventListener('wheel', scrollEvent, false); 
         document.addEventListener('scroll', scrollEvent, false); 
         return (() => {
@@ -30,32 +29,36 @@ const Table: React.FC<tableProps> = (props) => {
             document.removeEventListener('scroll', scrollEvent, false);
         });
         // eslint-disable-next-line
-    },[]);
+    },[props.actData]);
 
     const scrollEvent = () => {
         let newPos = window.pageYOffset;
-        let len = newPos - yPos;
+        let len = props.actData.length;
         //yPos = window.pageYOffset;
-        if ((newPos - 100) > yPos){
+        if ((newPos - yPos) > 200){
+            //console.log('true' + len)
             yPos = newPos;
-            addStrs();
-        }else if ((newPos + 100) < yPos){
+            addStrs(len);
+        }/*else if ((newPos - yPos) < -200){
+            console.log('false' + len)
             yPos = newPos;
-            removeStrs();
+            removeStrs(len);
+        }*/
+    }
+
+    const addStrs = (val: number) => {
+        let i = props.actData.length;
+        if (val > 0){
+            props.setActData( props.dataSet.slice(0, (val + 10)));
+            setNum(num + 10);
         }
-        //console.log(yPos)
     }
 
-    const addStrs = () => {
-        let i = actData.length;
-        console.log(actData)
-        //setActData( props.dataSet.slice(0, (i + 10)));
-    }
-
-    const removeStrs = () => {
-        let i = actData.length;
-        console.log(actData)
-        //setActData( props.dataSet.slice(0, (i - 10)));
+    const removeStrs = (val: number) => {
+        let i = props.actData.length;
+        if (val > 10){
+            props.setActData( props.dataSet.slice(0, (val - 10)))
+        }  
     }
     
     return(
@@ -80,7 +83,7 @@ const Table: React.FC<tableProps> = (props) => {
                                 <div>STAR</div>
                             </td>
                         </tr>
-                        {actData.map( row => <TableLine key={uuid()} row={row} />)}
+                        {props.dataSet.map( (row, indx )=> <TableLine key={uuid()} row={row} indx={indx} num={num}/>)}
                     </tbody>
                 </table>
             </div>
