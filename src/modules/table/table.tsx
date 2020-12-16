@@ -9,64 +9,70 @@ interface ITableProps {
     dataSet: Array<IDataSet>;
     actData: Array<IDataSet>;
     setActData: (arr: Array<IDataSet>) => void;
+    setEditFavorite: (val: number) => void;
 }
 
-let yPos: number = 0;
-
-const Table: React.FC<ITableProps> = (props) => {
-
-    const [actData, setActData] = useState<Array<IDataSet>>([]);
-    const [num, setNum] = useState<number>(10);
+let Table: React.FC<ITableProps> = (props) => {
+    let kol: number = 0;
+    //console.log('render OSN');
 
     useEffect( () => {
-        if (props.actData.length > 0){
-            setActData(props.actData)
-        }
-        document.addEventListener('wheel', scrollEvent, false); 
-        document.addEventListener('scroll', scrollEvent, false); 
-        return (() => {
+        document.addEventListener('wheel', scrollEvent, false);
+        document.addEventListener('scroll', scrollEvent, false);
+        return( () => {
             document.removeEventListener('wheel', scrollEvent, false);
             document.removeEventListener('scroll', scrollEvent, false);
-        });
+        }) 
         // eslint-disable-next-line
-    },[props.actData]);
+    },[]);
+
+    useEffect( () => {
+        kol = 0;
+        showLine();
+    },[props.dataSet])
 
     const scrollEvent = () => {
-        let newPos = window.pageYOffset;
-        let len = props.actData.length;
-        //yPos = window.pageYOffset;
-        if ((newPos - yPos) > 200){
-            //console.log('true' + len)
-            yPos = newPos;
-            addStrs(len);
-        }/*else if ((newPos - yPos) < -200){
-            console.log('false' + len)
-            yPos = newPos;
-            removeStrs(len);
-        }*/
-    }
-
-    const addStrs = (val: number) => {
-        let i = props.actData.length;
-        if (val > 0){
-            props.setActData( props.dataSet.slice(0, (val + 10)));
-            setNum(num + 10);
+        if (((document.documentElement.scrollHeight - document.documentElement.scrollTop) - 100) <= document.documentElement.clientHeight){
+            showLine();
         }
     }
 
-    const removeStrs = (val: number) => {
-        let i = props.actData.length;
-        if (val > 10){
-            props.setActData( props.dataSet.slice(0, (val - 10)))
-        }  
+    const showLine = async() => {
+        for (let i = kol; i < (kol + 10); i++){
+            let element= document.getElementById('tr_' + i);
+            if (element){
+                await sleep(100)
+                //element.style.display = 'table-row';
+                element.classList.add("table_block_active")
+            }
+        } 
+        kol += 10;
+    }
+
+    const hideLine = async() => {
+        console.log(kol)
+        for (let i = 0; i <= kol; i++){
+            
+            let element= document.getElementById('tr_' + i);
+            if (element){
+                await sleep(50)
+                //element.style.display = 'table-row';
+                element.classList.add("table_block_deact")
+            }
+        } 
+        kol += 10;
+    }
+
+    const sleep = (ms:number) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
     
     return(
         <div className='dfc jcc wd1'>
-            <div className='dfr jcc wd1'>
-                <table className='wd1 table_body'>
+            <div className='dfc jcc wd1'>
+                {/*<table className='wd1 table_body'>
                     <tbody>
-                        <tr className='table_tr'>
+                        <tr className='table_tr2'>
                             <td className='table_td1'>
                                 <div>LOGO</div>
                             </td>
@@ -83,12 +89,20 @@ const Table: React.FC<ITableProps> = (props) => {
                                 <div>STAR</div>
                             </td>
                         </tr>
-                        {props.dataSet.map( (row, indx )=> <TableLine key={uuid()} row={row} indx={indx} num={num}/>)}
+                        {props.dataSet.map( (row, indx )=> <TableLine key={uuid()} row={row} indx={indx} str={uuid()}/>)}
                     </tbody>
-                </table>
+                </table>*/}
+                {/*<div className='table_block_active dfr jcc wd1 border_l'>
+                    <div className='tb_cell1'>LOGO</div>
+                    <div className='tb_cell2'>NAME</div>
+                    <div className='tb_cell3'>AGE</div>
+                    <div className='tb_cell4'>NUM</div>
+                    <div className='tb_cell5'>STAR</div>
+            </div>*/}
+                {props.dataSet.map( (row, indx )=> <TableLine key={uuid()} row={row} indx={indx} str={uuid()} setEditFavorite={props.setEditFavorite}/>)}
             </div>
         </div>
     )
 }
 
-export default Table;
+export default Table //= React.memo(Table);

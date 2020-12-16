@@ -3,7 +3,7 @@ import './App.css';
 import Sort from './modules/sort/sort';
 import Table from './modules/table/table';
 import Prev from './modules/prev/prev';
-import { setDataIn } from './store/dataSet/actions';
+import { setDataIn, setEditFavorite } from './store/dataSet/actions';
 import {connect} from 'react-redux';
 let data: Array<IDataSet> = require('./data.json');
 
@@ -21,6 +21,7 @@ export interface IDataSet {
 interface appProps {
   setDataIn: (arr: Array<IDataSet>) => void;
   dataRedux: Array<IDataSet>;
+  setEditFavorite: (val: number) => void;
 }
 
 const App: React.FC<appProps> = (props) => {
@@ -91,7 +92,7 @@ const App: React.FC<appProps> = (props) => {
         </div>
       </div>
       {btStat && <Prev dataSet={props.dataRedux} actData={actData} setActData={setActData}/>}
-      {!btStat && <Table dataSet={props.dataRedux} actData={actData} setActData={setActData}/>}
+      {!btStat && <Table dataSet={props.dataRedux} actData={actData} setActData={setActData} setEditFavorite={props.setEditFavorite}/>}
     </div>
   );
 }
@@ -105,7 +106,8 @@ const pushStateToProps = (state: any) => {
 };
 
 const pushDispatchToProps = {
-  setDataIn
+  setDataIn,
+  setEditFavorite,
 };
 
 export default connect(pushStateToProps, pushDispatchToProps)(App);

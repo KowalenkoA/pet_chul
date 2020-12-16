@@ -22,7 +22,7 @@ let PrevLine: React.FC<IPrevLineProps> = (props) => {
     //const parentRef = useRef<HTMLDivElement>(null);
     
 
-    useEffect(() => {
+    /*useEffect(() => {
         //element = document.getElementById(props.idName)
         /*element= document.getElementById(props.idName);
         let targetPosition;
@@ -40,16 +40,16 @@ let PrevLine: React.FC<IPrevLineProps> = (props) => {
         }*/
        
         //console.log(targetPosition);
-        document.addEventListener('wheel', scrollEvent, false); 
+        /*document.addEventListener('wheel', scrollEvent, false); 
         document.addEventListener('scroll', scrollEvent, false);
         {console.log('render')}
         return (() => {
             document.removeEventListener('wheel', scrollEvent, false);
             document.removeEventListener('scroll', scrollEvent, false);
         });
-    },[]);
+    },[]);*/
 
-    useEffect(() => {
+    /*useEffect(() => {
         element= document.getElementById(props.idName);
         let targetPosition;
         let windowPosition;
@@ -63,7 +63,7 @@ let PrevLine: React.FC<IPrevLineProps> = (props) => {
             console.log('TOP: ' + targetPosition.top)
             //setY(targetPosition.top);
         }
-    }, [])
+    }, [])*/
 
     const scrollEvent = () => {
         let SH = document.body.scrollHeight;
@@ -110,10 +110,10 @@ let PrevLine: React.FC<IPrevLineProps> = (props) => {
         }
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         console.log('UPDATE')
         setUpdate('update')
-    },[check])
+    },[check])*/
 
     /*useEffect( () => {
         if (props.actData.length > 0){

@@ -1,35 +1,31 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { IDataSet } from '../../App';
 import './table.scss'
 
 interface tableLineProps {
     row: IDataSet;
     indx: number;
-    num: number;
+    str: string;
+    setEditFavorite: (val: number) => void
 }
 
 let TableLine: React.FC<tableLineProps> = (props) => {
+
+    const [fav, setFav] = useState<boolean>(props.row.favourite);
+
+    const changeFavourite = () => {
+        setFav(!fav);
+        props.setEditFavorite(props.indx);
+    }
+
     return(
-        <>
-            {props.indx < props.num &&<tr className='table_tr'>
-                <td className='table_td1'>
-                    <img className='table_img' src={"/images/"+props.row.image+".svg"} />
-                </td>
-                <td>
-                    <div>{props.row.name}</div>
-                </td>
-                <td>
-                    <div>{props.row.age} </div>
-                </td>
-                <td>
-                    <div>{props.row.phone}</div>
-                </td>
-                <td className='table_td5'>
-                    <div>{props.row.favourite ? 'TRUE' : 'FALSE'}</div>
-                </td>
-            </tr>}
-        </>
-        
+        <div className='table_block dfr jcc wd1' id={'tr_' + props.indx}>
+            <div className='tb_cell1 dfc jcc'><img className='table_img' src={"/images/"+props.row.image+".svg"} /></div>
+            <label className='tb_cell2'>{props.row.name}</label>
+            <label className='tb_cell3'>{props.row.age}</label>
+            <label className='tb_cell4'>{props.row.phone}</label>
+            <label className='tb_cell5' onClick={changeFavourite}>{fav ? 'TRUE' : 'FALSE'}</label>
+        </div>
     )
 }
 
