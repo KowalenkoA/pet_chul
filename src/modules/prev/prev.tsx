@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { IDataSet } from '../../App';
 import './prev.scss'
 import PrevLine from './prevLine';
-import { v4 as uudi} from 'uuid'
+import { v4 as uuid} from 'uuid'
 
 interface IPrevProps {
     dataSet: Array<IDataSet>;
-    actData: Array<IDataSet>;
-    setActData: (arr: Array<IDataSet>) => void;
+    setEditFavorite: (val: number) => void;
 }
 
 interface IV {
@@ -25,8 +24,58 @@ const Prev: React.FC<IPrevProps> = (props) => {
     //const [actData, setActData] = useState<Array<IDataSet>>([]);
     //const [num, setNum] = useState<number>(10);
     //const [vArr, setVArr] = useState<Array<IV>>([]);
+    let kol: number = 0;
 
-    
+    useEffect( () => {
+        document.addEventListener('wheel', scrollEvent, false);
+        document.addEventListener('scroll', scrollEvent, false);
+        return( () => {
+            document.removeEventListener('wheel', scrollEvent, false);
+            document.removeEventListener('scroll', scrollEvent, false);
+        }) 
+        // eslint-disable-next-line
+    },[]);
+
+    useEffect( () => {
+        kol = 0;
+        showLine(); 
+    },[props.dataSet])
+
+    const scrollEvent = () => {
+        if (((document.documentElement.scrollHeight - document.documentElement.scrollTop) - 100) <= document.documentElement.clientHeight){
+            showLine();
+        }
+    }
+
+    const showLine = async() => {
+        for (let i = kol; i < (kol + 15); i++){
+            let element= document.getElementById('pr_' + i);
+            if (element){
+                await sleep(100)
+                //element.style.display = 'table-row';
+                element.classList.add("prev_block_active")
+                //element.classList.remove("prev_block_deact")
+            }
+        } 
+        kol += 10;
+    }
+
+    const hideLine = async() => {
+        console.log(kol)
+        for (let i = 0; i <= kol; i++){
+            let element= document.getElementById('pr_' + i);
+            if (element){
+                await sleep(50)
+                //element.style.display = 'table-row';
+                element.classList.add("prev_block_deact")
+            }
+        } 
+        kol += 5;
+    }
+
+    const sleep = (ms:number) => {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     /*useEffect( () => {
         if (props.actData.length > 0){
@@ -41,36 +90,32 @@ const Prev: React.FC<IPrevProps> = (props) => {
         // eslint-disable-next-line
     },[props.actData]);*/
 
-    const scrollEvent = () => {
+    /*const scrollEvent = () => {
         let newPos = window.pageYOffset;
-        let len = props.actData.length;
+        let len = props.dataSet.length;
         //yPos = window.pageYOffset;
         if ((newPos - yPos) > 200){
             //console.log('true' + len)
             yPos = newPos;
             addStrs(len);
-        }/*else if ((newPos - yPos) < -200){
-            console.log('false' + len)
-            yPos = newPos;
-            removeStrs(len);
-        }*/
-    }
+        }
+    }*/
 
     const addStrs = (val: number) => {
-        let i = props.actData.length;
+        let i = props.dataSet.length;
         if (val > 0){
             //props.setActData(...props.actData, props.dataSet.slice(i, (i + 10)))
-            props.setActData( props.dataSet.slice(0, (val + 10)));
+            //props.setActData( props.dataSet.slice(0, (val + 10)));
             //setNum(num + 10);
         }
     }
 
-    const removeStrs = (val: number) => {
+    /*const removeStrs = (val: number) => {
         let i = props.actData.length;
         if (val > 10){
             props.setActData( props.dataSet.slice(0, (val - 10)))
         }  
-    }
+    }*/
     
     const testF = () => {
         //console.log(window.pageYOffset);
@@ -134,8 +179,7 @@ const Prev: React.FC<IPrevProps> = (props) => {
     return(
         <div className='dfr wd1 prev_main'>
             {console.log('prev render')}
-            <label onClick={testF}>TEST</label>
-            { props.dataSet.map( (row, indx) => <PrevLine key={uudi()} row={row} idName={uudi()} addV={addV} indx={indx} />)}
+            { props.dataSet.map( (row, indx) => <PrevLine key={uuid()} row={row} str={uuid()} setEditFavorite={props.setEditFavorite} addV={addV} indx={indx} />)}
 
         </div>
     )

@@ -22,7 +22,7 @@ let TableLine: React.FC<tableLineProps> = (props) => {
         <div className='table_block dfr jcc wd1' id={'tr_' + props.indx}>
             <div className='tb_cell1 dfc jcc'><img className='table_img' src={"/images/"+props.row.image+".svg"} /></div>
             <label className='tb_cell2'>{props.row.name}</label>
-            <label className='tb_cell3'>{props.row.age}</label>
+            <label className='tb_cell3'>{props.row.age} age</label>
             <label className='tb_cell4'>{props.row.phone}</label>
             <label className='tb_cell5' onClick={changeFavourite}>{fav ? 'TRUE' : 'FALSE'}</label>
         </div>
